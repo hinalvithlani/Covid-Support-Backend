@@ -27,12 +27,35 @@ app.post("/Add", function(req, res){
         return
     }
     var data = {name, email,phone_number, state, city, location, beds, oxygen, others} = req.body
-    firebase.database().ref(req.body.state + "/"+req.body.city).set({name, email, phone_number, state, city, location, beds, oxygen, others});
+    firebase.database().ref(req.body.state + "/"+req.body.city+"/"+req.body.location).set({name, email, phone_number, state, city, location, beds, oxygen, others});
     console.log(req.body)
     res.json({
         status: "successful"
     })
 })
+
+app.post("/state", function(req,res){
+    firebase.database().ref(req.body.state).once('value')
+    .then(function(snapshot) {
+        var queryResponse = snapshot.val()
+        var ans = []
+        for(x in queryResponse){
+            ans.push(x)
+        }
+        console.log(ans)
+        res.json(ans)
+    })
+})
+
+app.post("/city", function(req,res){
+    firebase.database().ref(req.body.state+"/"+req.body.city).once('value')
+    .then(function(snapshot) {
+        var queryResponse = snapshot.val()
+        console.log(queryResponse)
+        res.json(queryResponse)
+    })
+})
+
 app.listen(3000)
 
 function validate(data){

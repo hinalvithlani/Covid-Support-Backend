@@ -2,6 +2,7 @@ var firebase = require('firebase')
 var dotenv = require('dotenv').config()
 var express = require('express')
 var bodyParser = require('body-parser')
+var cors = require('cors')
 
 var firebaseConfig = {
     apiKey: process.env.apiKey,
@@ -17,6 +18,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var app = express();
 app.use(bodyParser.json())
+app.use(cors())
 
 app.post("/Add", function(req, res){
     if(!validate(req.body)){

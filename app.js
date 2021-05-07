@@ -28,6 +28,9 @@ app.post("/Add", function(req, res){
         console.log("validation failed")
         return
     }
+    req.body.phone_number=parseInt(req.body.phone_number);
+    req.body.beds=parseInt(req.body.beds);
+    req.body.oxygen=parseInt(req.body.oxygen);
     var data = {name, email,phone_number, state, city, location, beds, oxygen, others} = req.body
     firebase.database().ref(req.body.state + "/"+req.body.city+"/"+req.body.location).set({name, email, phone_number, state, city, location, beds, oxygen, others});
     console.log(req.body)
@@ -71,7 +74,7 @@ function validate(data){
         return false
     else if(!data.email.match(emailRegex))
         return false
-    else if(typeof(data.phone_number)!='number' || typeof(data.beds)!='number' || typeof(data.oxygen)!='number')
+    else if(isNaN(data.phone_number) || isNaN(data.beds) || isNaN(data.oxygen))
         return false
     else
         return true

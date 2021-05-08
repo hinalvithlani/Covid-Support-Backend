@@ -31,8 +31,11 @@ app.post("/Add", function(req, res){
     req.body.phone_number=parseInt(req.body.phone_number);
     req.body.beds=parseInt(req.body.beds);
     req.body.oxygen=parseInt(req.body.oxygen);
-    var data = {name, email,phone_number, state, city, location, beds, oxygen, others} = req.body
-    firebase.database().ref(req.body.state + "/"+req.body.city+"/"+req.body.location).set({name, email, phone_number, state, city, location, beds, oxygen, others});
+    req.body.provider_contact = parseInt(req.body.provider_contact)
+    req.body.helpful = parseInt(req.body.helpful)
+    req.body.not_helpful = parseInt(req.body.not_helpful)
+    var data = {name, email,phone_number, provider_contact, state, city, location, beds, oxygen, others, helpful, not_helpful, verified} = req.body
+    firebase.database().ref(req.body.state + "/"+req.body.city+"/"+req.body.location).set({name, email, phone_number, provider_contact, state, city, location, beds, oxygen, others, helpful, not_helpful, verified});
     console.log(req.body)
     res.json({
         status: "successful"
@@ -74,7 +77,9 @@ function validate(data){
         return false
     else if(!data.email.match(emailRegex))
         return false
-    else if(isNaN(data.phone_number) || isNaN(data.beds) || isNaN(data.oxygen))
+    else if(isNaN(data.phone_number) || isNaN(data.beds) || isNaN(data.oxygen) || isNaN(data.provider_contact))
+        return false
+    else if(!(typeof data.verified ==="boolean") || isNaN(data.helpful) || isNaN(data.not_helpful))
         return false
     else
         return true
